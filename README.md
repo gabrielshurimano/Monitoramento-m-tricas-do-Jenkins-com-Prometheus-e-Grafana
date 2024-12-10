@@ -4,11 +4,11 @@
 
 # README - Monitoramento do Jenkins com Prometheus e Grafana
 
-Seguindo os passos apresentados nesse repositório conseguimos configurar o Jenkins em um servidor Tomcat e acompanharmos as métricas para monitoramento de seus dados com o Prometheus que irá coletar essas métricas e o grafana que irá nos apresentar de forma clara e intuitiva, lembrando que iremos fazer todos os passos usando containers docker.
+Seguindo os passos apresentados neste repositório, conseguimos configurar o Jenkins em um servidor Tomcat e acompanhamos as métricas para monitoramento de seus dados com o **Prometheus**, que irá coletar essas métricas, e o **Grafana**, que as apresentará de forma clara e intuitiva. Todos os passos serão feitos utilizando containers Docker.
 
 ## 1. Baixar o Jenkins
 
-Primeiro,vamos baxiar o arquivo WAR do Jenkins para o nosso host:
+Primeiro, vamos baixar o arquivo **WAR** do Jenkins para o nosso host:
 
 ```bash
 curl -L -o jenkins.war https://get.jenkins.io/war-stable/latest/jenkins.war
@@ -16,15 +16,15 @@ curl -L -o jenkins.war https://get.jenkins.io/war-stable/latest/jenkins.war
 
 ## 2. Configurar o Tomcat
 
-Agora iremos criar um container docker com o Tomcat:
+Agora, iremos criar um container Docker com o **Tomcat**:
 
 ```bash
 docker run -d --name tomcat-container -p 8080:8080 tomcat:jdk17
 ```
 
-**Nota**: Lembrando que iremos acessar a interface do jenkins através dessa porta `8080`.
+**Nota**: Lembre-se de que iremos acessar a interface do Jenkins através da porta **8080**.
 
-Verifique se o contaienr está UP:
+Verifique se o container está **UP**:
 
 ```bash
 docker ps
@@ -40,7 +40,7 @@ Após iniciar o Tomcat, acesse o Jenkins em:
 http://localhost:8080/jenkins
 ```
 
-O Jenkins irá solicitar uma senha, que é a senha do administrador, para conseguir ela vamos seguir esses passos:
+O Jenkins irá solicitar uma senha, que é a senha do administrador. Para obtê-la, siga os seguintes passos:
 
 ```bash
 docker exec -it tomcat-container bash
@@ -56,9 +56,9 @@ Essa senha será usada para fazer o login no Jenkins pela primeira vez.
 
 - Após fazer login no Jenkins, vá até **Gerenciar Jenkins > Gerenciar Plugins**.
 - Na aba **Disponíveis**, procure por **Prometheus Metrics Plugin**.
-- Instale o plugin e reinicie o o container do Tom cat.
+- Instale o plugin e reinicie o container do Tomcat:
 
-  ```bash
+```bash
 docker restart tomcat-container
 ```
 
@@ -69,7 +69,7 @@ docker restart tomcat-container
 Como o acesso remoto não será necessário, siga as etapas abaixo para criar um usuário:
 
 1. Acesse **Gerenciar Jenkins > Configuração Global de Segurança**.
-2. Configure o **autenticação** com o tipo que preferir (por exemplo, **Usuários individuais**).
+2. Configure a **autenticação** com o tipo que preferir (por exemplo, **Usuários individuais**).
 3. Crie um usuário e defina a senha.
 
 ---
@@ -93,7 +93,7 @@ Clique em **Salvar**.
 
 ### Criar o arquivo `prometheus.yml`
 
-1. Crie o arquivo `prometheus.yml` no diretório do seu projeto com o seguinte conteúdo:
+1. Crie o arquivo **`prometheus.yml`** no diretório do seu projeto com o seguinte conteúdo:
 
     ```yaml
     global:
@@ -172,5 +172,6 @@ Após o login, defina uma nova senha.
 ## 12. Conclusão
 
 Agora nós temos um ambiente configurado para monitorar o Jenkins usando Prometheus e Grafana, tudo em containers Docker. 
+
 ---
 
