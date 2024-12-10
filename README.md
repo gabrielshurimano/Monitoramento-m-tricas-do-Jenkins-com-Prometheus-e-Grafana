@@ -42,6 +42,9 @@ http://localhost:8080/jenkins
 
 O Jenkins irá solicitar uma senha, que é a senha do administrador. Para obtê-la, siga os seguintes passos:
 
+![solicitando senha de acesso](img/login.jpeg)
+
+
 ```bash
 docker exec -it tomcat-container bash
 cd /root/.jenkins/secrets/
@@ -52,31 +55,40 @@ Essa senha será usada para fazer o login no Jenkins pela primeira vez.
 
 ---
 
-## 4. Instalar Extensões no Jenkins
+## 4. Instalar Extensões sugeridas no Jenkins e crie um usuário
 
-- Após fazer login no Jenkins, vá até **Gerenciar Jenkins > Gerenciar Plugins**.
+Instale as extensões sugeridas:
+
+![instalando extensões](img/pluguin.jpeg)
+![processo de instalação](img/processo.jpeg)
+
+agora crie um usuário:
+
+![processo de instalação](img/user.jpeg)
+
+Como não pretendemos acessar o Jenkins de forma remota avance sem alterar a URL:
+
+![processo de instalação](img/url.jpeg)
+
+Caso a tela principal do Jenkins apareça em diante, parabéns você conseguiu:
+
+![processo de instalação](img/tela.jpeg)
+
+- Agora vamos adicionar o pluguin do Prometheus, respnsável pela integração com a ferramenta, vá até **Gerenciar Jenkins > Gerenciar Plugins**.
 - Na aba **Disponíveis**, procure por **Prometheus Metrics Plugin**.
 - Instale o plugin e reinicie o container do Tomcat:
+
+![instalação prometheus](img/instalprometheus.jpeg)
 
 ```bash
 docker restart tomcat-container
 ```
 
----
 
-## 5. Criar um Usuário no Jenkins
 
-Como o acesso remoto não será necessário, siga as etapas abaixo para criar um usuário:
+## 5. Configurar o Plugin Prometheus no Jenkins
 
-1. Acesse **Gerenciar Jenkins > Configuração Global de Segurança**.
-2. Configure a **autenticação** com o tipo que preferir (por exemplo, **Usuários individuais**).
-3. Crie um usuário e defina a senha.
-
----
-
-## 6. Configurar o Plugin Prometheus no Jenkins
-
-1. Vá até **Gerenciar Jenkins > Configurar o Sistema**.
+1. Faça logins no Jenkins. Vá até **Gerenciar Jenkins > Configurar o Sistema**.
 2. Na seção **Prometheus**, configure as opções conforme o exemplo abaixo:
 
     - **Path**: `/prometheus` (padrão)
@@ -84,6 +96,8 @@ Como o acesso remoto não será necessário, siga as etapas abaixo para criar um
     - **Enable authentication**: **Desabilitado** (opcional, se o Jenkins for exposto publicamente)
     - **Collecting metrics period**: `120` (2 minutos)
     - **Job attribute name**: `jenkins_job`
+
+![configuração de parametros prometheus](img/confprometeus.jpeg)
 
 Clique em **Salvar**.
 
@@ -121,6 +135,8 @@ Clique em **Salvar**.
 
 4. Acesse o Prometheus em `http://localhost:9090/targets` e verifique se o endpoint do Jenkins está **UP**.
 
+![EndopointUP](img/endup.jpeg)
+
 ---
 
 ## 8. Configurar o Grafana
@@ -137,9 +153,15 @@ Clique em **Salvar**.
 
 Após o login, defina uma nova senha.
 
+![grafanalogin](img/graf.jpeg)
+
 3. Conectar o Grafana ao Prometheus:
     - Vá para **Configuration > Data Sources** e selecione **Prometheus**.
     - Insira a URL do Prometheus: `http://172.17.0.3:9090` (substitua pelo IP correto do container Prometheus).
+    ```bash
+    docker network inspect bridge 
+    ```
+
     - Clique em **Save & Test**.
 
 ---
@@ -159,6 +181,9 @@ Após o login, defina uma nova senha.
 
 - No painel, configure as opções de visualização para exibir as métricas de forma mais clara.
 - Ajuste os tipos de gráficos conforme a necessidade (por exemplo, gráficos de barras, séries temporais, etc.).
+- Deixei o Json do Dashboard do grafana neste repositório.
+
+![grafanalogin](img/dashgraf.jpeg)
 
 ---
 
@@ -172,6 +197,9 @@ Após o login, defina uma nova senha.
 ## 12. Conclusão
 
 Agora nós temos um ambiente configurado para monitorar o Jenkins usando Prometheus e Grafana, tudo em containers Docker. 
+
+01000100 01100101 01110101 01110011 00100000 11101001 00100000 01100110 01101001 01100101 01101100 00100001
+
 
 ---
 
